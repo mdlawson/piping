@@ -15,7 +15,7 @@ Piping is not a binary, so you can continue using your current workflow for runn
 
 or in plain JS
 
-    if(require("piping")()) {
+    if (require("piping")()) {
       // application logic here
       express = require("express");
       app = express();
@@ -25,8 +25,8 @@ or in plain JS
 This if condition is necessary because your file will be invoked twice, but should only actually do anything the second time, when it is spawned as a separate node process, supervised by piping. Piping returns true when its good to go. 
 
 the function returned by piping also accepts an options object. The following options are supported:
-- main (path): The path to the "top" file of your application. Defaults to `require.main.filename`, which should be sufficient provided you launch your application via "node yourapp.js". Other launch methods may require this to be set manually. If your app doesn't reload/reloads when it shouldn't, try changing this. 
-- hook (true/false): Whether to hook into node's "require" function and only watch required files. Defaults to false, which means piping will watch all the files in the folder in which main resides. The require hook can only detect files required after invoking this module!
-- includeModules (true/false): Whether to include required files than reside in node_modules folders. Only has an effect when hook is true. For ignoring node_modules when hook is false, please use ignore.
-- ignore (regex): Files/paths matching this regex will not be watched. Defaults to `/(\/\.|~$)/` 
+- __main__ _(path)_: The path to the "top" file of your application. Defaults to `require.main.filename`, which should be sufficient provided you launch your application via "node yourapp.js". Other launch methods may require this to be set manually. If your app doesn't reload/reloads when it shouldn't, try changing this. 
+- __hook__ _(true/false)_: Whether to hook into node's "require" function and only watch required files. Defaults to false, which means piping will watch all the files in the folder in which main resides. The require hook can only detect files required after invoking this module!
+- __includeModules__ _(true/false)_: Whether to include required files than reside in node_modules folders. Only has an effect when hook is true. For ignoring node_modules when hook is false, please use ignore.
+- __ignore__ _(regex)_: Files/paths matching this regex will not be watched. Defaults to `/(\/\.|~$)/` 
 

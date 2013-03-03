@@ -12,7 +12,7 @@ module.exports = (ops) ->
 
   if cluster.isMaster
     cluster.setupMaster
-      exec: require.main.filename
+      exec: options.main
       args: process.argv
 
     chokidar = require "chokidar"

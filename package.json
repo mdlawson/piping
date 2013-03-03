@@ -9,10 +9,7 @@
   "devDependencies": {
     "coffee-script": "~1.5.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": "",
+  "repository": "git://github.com/mdlawson/piping.git",
   "keywords": [
     "live",
     "code",

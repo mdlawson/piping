@@ -1,0 +1,24 @@
+{
+  "name": "piping",
+  "version": "0.1.0",
+  "description": "Keep your code piping hot! Live code reloading without additional binaries",
+  "main": "piping.js",
+  "dependencies": {
+    "chokidar": "0.5.x",
+  },
+  "devDependencies": {
+    "coffee-script": "~1.5.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "live",
+    "code",
+    "reload",
+    "hot"
+  ],
+  "author": "Michael Lawson",
+  "license": "MIT"
+}

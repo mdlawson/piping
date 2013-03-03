@@ -4,7 +4,7 @@
   "description": "Keep your code piping hot! Live code reloading without additional binaries",
   "main": "piping.js",
   "dependencies": {
-    "chokidar": "0.5.x",
+    "chokidar": "0.5.x"
   },
   "devDependencies": {
     "coffee-script": "~1.5.0"

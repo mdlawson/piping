@@ -3,6 +3,10 @@ Piping adds "hot reloading" functionality to node, watching all your project fil
 
 Piping uses the currently unstable "cluster" API to spawn your application in a thread and then kill/reload it when necessary. Because of this, piping should be considered unstable and should not be used in production (why would you ever need live code reloading in production anyway). Currently, at least on windows, the cluster API seems stable enough for development.
 
+## Installation
+
+    npm install piping
+
 ## Usage
 
 Piping is not a binary, so you can continue using your current workflow for running your application ("wooo!"). Basic usage is as follows:

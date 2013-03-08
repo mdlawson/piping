@@ -1,5 +1,7 @@
 # Piping
-Piping adds "hot reloading" functionality to node, watching all your project files and reloading when anything changes. 
+
+There are already node "wrappers" that handle watching for file changes and restarting your application (such as [node-supervisor](https://github.com/isaacs/node-supervisor)), as well as reloading on crash, but I wasn't fond of having that.
+Piping adds "hot reloading" functionality to node, watching all your project files and reloading when anything changes, without requiring a "wrapper" binary. 
 
 Piping uses the currently unstable "cluster" API to spawn your application in a thread and then kill/reload it when necessary. Because of this, piping should be considered unstable and should not be used in production (why would you ever need live code reloading in production anyway). Currently, at least on windows, the cluster API seems stable enough for development.
 

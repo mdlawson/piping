@@ -8,7 +8,11 @@ options =
     main: require.main.filename
     ignore: /(\/\.|~$)/ 
 module.exports = (ops) ->
-  options[key] = value for key,value of ops
+  if typeof ops is "string" or ops instanceof String
+    options.main = path.resolve ops
+  else
+    for key,value of ops
+      options[key] = value if key isnt main else path.resolve value
 
   if cluster.isMaster
     cluster.setupMaster

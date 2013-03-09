@@ -18,9 +18,13 @@
 
   module.exports = function(ops) {
     var chokidar, currentFile, currentPath, initial, key, messageHandler, module, value, watcher, worker, _load_orig;
-    for (key in ops) {
-      value = ops[key];
-      options[key] = value;
+    if (typeof ops === "string" || ops instanceof String) {
+      options.main = path.resolve(ops);
+    } else {
+      for (key in ops) {
+        value = ops[key];
+        options[key] = value(key !== main ? void 0 : path.resolve(value));
+      }
     }
     if (cluster.isMaster) {
       cluster.setupMaster({

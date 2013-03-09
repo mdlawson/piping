@@ -38,7 +38,7 @@ the function returned by piping also accepts an options object. The following op
 
 Example:
   
-    if (require("piping")(main:"./app/server.js",hook:true)){
+    if (require("piping")({main:"./app/server.js",hook:true})){
       // app logic
     }
 

@@ -36,6 +36,7 @@ the function returned by piping also accepts an options object. The following op
 - __includeModules__ _(true/false)_: Whether to include required files than reside in node_modules folders. Defaults to false. Only has an effect when hook is true. For ignoring node_modules when hook is false, please use ignore.
 - __ignore__ _(regex)_: Files/paths matching this regex will not be watched. Defaults to `/(\/\.|~$)/`
 - __language__ _(string)_: The name of a module that will be required before your main is invoked. This allows for "coffee-script" to be specified to support a coffeescript main, launchable though "coffee". Probably works for other languages as well. Coffeescripters don't actually need this, as coffee-script is required automatically if main is a .coffee file. 
+
 Example:
   
     if (require("piping")({main:"./app/server.js",hook:true})){

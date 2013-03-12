@@ -16,7 +16,7 @@ module.exports = (ops) ->
   
   if cluster.isMaster
     cluster.setupMaster
-      exec: "./lib/launcher.js"
+      exec: path.join(path.dirname(module.filename),"launcher.js")
 
     chokidar = require "chokidar"
 

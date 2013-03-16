@@ -6,28 +6,28 @@ Piping adds "hot reloading" functionality to node, watching all your project fil
 Piping uses the currently unstable "cluster" API to spawn your application in a thread and then kill/reload it when necessary. Because of this, piping should be considered unstable and should not be used in production (why would you ever need live code reloading in production anyway). Currently, at least on windows, the cluster API seems stable enough for development.
 
 ## Installation
-
-    npm install piping
-
+```
+npm install piping
+```
 ## Usage
 
 Piping is not a binary, so you can continue using your current workflow for running your application ("wooo!"). Basic usage is as follows:
-
-    if require("piping")()
-      # application logic here
-      express = require "express"
-      app = express()
-      app.listen 3000
-
-or in plain JS
-
-    if (require("piping")()) {
-      // application logic here
-      express = require("express");
-      app = express();
-      app.listen(3000);
-    }
-
+```javascript
+if (require("piping")()) {
+  // application logic here
+  express = require("express");
+  app = express();
+  app.listen(3000);
+}
+```
+or in coffeescript:
+```coffee
+if require("piping")()
+  # application logic here
+  express = require "express"
+  app = express()
+  app.listen 3000
+```
 This if condition is necessary because your file will be invoked twice, but should only actually do anything the second time, when it is spawned as a separate node process, supervised by piping. Piping returns true when its good to go. 
 
 the function returned by piping also accepts an options object. The following options are supported:
@@ -38,13 +38,25 @@ the function returned by piping also accepts an options object. The following op
 - __language__ _(string)_: The name of a module that will be required before your main is invoked. This allows for "coffee-script" to be specified to support a coffeescript main, launchable though "coffee". Probably works for other languages as well. Coffeescripters don't actually need this, as coffee-script is required automatically if main is a .coffee file. 
 
 Example:
-  
-    if (require("piping")({main:"./app/server.js",hook:true})){
-      // app logic
-    }
+```javascript
+if (require("piping")({main:"./app/server.js",hook:true})){
+  // app logic
+}
+```
+Piping can also be used just by passing a string. In this case, the string is taken to be the "main" option:
+```javascript
+if (require("piping")("./app/server.js")){
+  // app logic
+}
+```
+One negative of all the examples above is the extra indent added to your code. To avoid this, you can choose to return when piping is false:
 
-Piping can also be used just by passing a string. In this case, the string is taken to be the "main" option.
-
-    if (require("piping")("./app/server.js")){
-      // app logic
-    }
+```javascript
+if (!require("piping")()) return
+// application logic here
+```
+or in coffeescript:
+```coffee
+if not require("piping")() then return
+# application logic here
+```

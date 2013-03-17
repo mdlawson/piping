@@ -52,7 +52,7 @@ if (require("piping")("./app/server.js")){
 One negative of all the examples above is the extra indent added to your code. To avoid this, you can choose to return when piping is false:
 
 ```javascript
-if (!require("piping")()) return
+if (!require("piping")()) { return; }
 // application logic here
 ```
 or in coffeescript:

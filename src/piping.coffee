@@ -31,7 +31,7 @@ module.exports = (ops) ->
 
     cluster.on "exit", (dead,code,signal) -> 
       if worker.err and worker.err isnt lastErr
-        console.log "[piping]".bold.red,"cant execute file:",options.main
+        console.log "[piping]".bold.red,"can't execute file:",options.main
         console.log "[piping]".bold.red,"error given was:",worker.err
         console.log "[piping]".bold.red,"further repeats of this error will be suppressed..."
       lastErr = worker.err
@@ -46,7 +46,7 @@ module.exports = (ops) ->
     
 
     watcher.on "change", (file) ->
-      console.log "[piping]".bold.red,"File",path.relative(path.dirname(options.main),file),"has changed, reloading."
+      console.log "[piping]".bold.red,"File",path.relative(process.cwd(),file),"has changed, reloading."
       worker.destroy()
     
     return false

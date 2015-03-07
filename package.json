@@ -1,11 +1,11 @@
 {
   "name": "piping",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Keep your code piping hot! Live code reloading without additional binaries",
   "main": "lib/piping.js",
   "dependencies": {
-    "chokidar": "0.5.x",
-    "colors": "0.6.x"
+    "chokidar": "0.12.x",
+    "colors": "1.0.x"
   },
   "devDependencies": {
     "coffee-script": "~1.6.0"

@@ -38,6 +38,9 @@ the function returned by piping also accepts an options object. The following op
 - __includeModules__ _(true/false)_: Whether to include required files than reside in node_modules folders. Defaults to false. Only has an effect when hook is true. For ignoring node_modules when hook is false, please use ignore.
 - __ignore__ _(regex)_: Files/paths matching this regex will not be watched. Defaults to `/(\/\.|~$)/`
 - __language__ _(string)_: The name of a module that will be required before your main is invoked. This allows for "coffee-script" to be specified to support a coffeescript main, launchable though "coffee". Probably works for other languages as well. Coffeescripters don't actually need this, as coffee-script is required automatically if main is a .coffee file. 
+- __usePolling__ _(true/false)_ : From chokidar. Default false. Whether to use fs.watchFile (backed by polling), or fs.watch. It is typically necessary to set this to true to successfully watch files over a network.
+- __interval__ _(true/false)_ : From chokidar. Polling specific. Interval of file system polling (default 100).
+- __binaryInterval__ _(true/false)_ : From chokidar. Polling specific. Interval of file system polling for binary files.
 
 Example:
 ```javascript

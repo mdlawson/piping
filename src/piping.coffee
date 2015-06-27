@@ -25,6 +25,9 @@ module.exports = (ops) ->
     watcher = chokidar.watch initial,
       ignored: options.ignore
       ignoreInitial: true
+      usePolling: options.usePolling
+      interval: options.interval || 100
+      binaryInterval: options.binaryInterval || 300
 
     lastErr = ""    
     worker = cluster.fork()

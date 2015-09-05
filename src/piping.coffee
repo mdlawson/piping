@@ -6,22 +6,22 @@ options =
     hook: false
     includeModules: false
     main: require.main.filename
-    ignore: /(\/\.|~$)/ 
+    ignore: /(\/\.|~$)/
 
 module.exports = (ops) ->
   if typeof ops is "string" or ops instanceof String
     options.main = path.resolve ops
   else
     options[key] = value for key,value of ops
-  
+
   if cluster.isMaster
     cluster.setupMaster
       exec: path.join(path.dirname(module.filename),"launcher.js")
 
     chokidar = require "chokidar"
 
-    initial = if options.hook then options.main else path.dirname options.main 
-    
+    initial = if options.hook then options.main else path.dirname options.main
+
     watcher = chokidar.watch initial,
       ignored: options.ignore
       ignoreInitial: true
@@ -29,29 +29,36 @@ module.exports = (ops) ->
       interval: options.interval || 100
       binaryInterval: options.binaryInterval || 300
 
-    lastErr = ""    
     worker = cluster.fork()
 
-    cluster.on "exit", (dead,code,signal) -> 
-      if worker.err and worker.err isnt lastErr
-        console.log "[piping]".bold.red,"can't execute file:",options.main
-        console.log "[piping]".bold.red,"error given was:",worker.err
-        console.log "[piping]".bold.red,"further repeats of this error will be suppressed..."
-      lastErr = worker.err
-      worker = cluster.fork()
-    
+    cluster.on "exit", (dead,code,signal) ->
+      if worker is null
+        # worker was killed due to a file change - respawn
+        worker = cluster.fork()
+      else
+        # worker died by itself - wait for file change
+        worker = null
+
     cluster.on "online", (worker) ->
       worker.send options
-      worker.on "message", (message) -> 
-        unless message.err
+      worker.on "message", (message) ->
+        if message.err
+          console.log "[piping]".bold.red,"can't execute file:",options.main
+          console.log "[piping]".bold.red,"error given was:",message.err
+        else if message.file
           watcher.add message.file
-        else worker.err = message.err
-    
+
 
     watcher.on "change", (file) ->
       console.log "[piping]".bold.red,"File",path.relative(process.cwd(),file),"has changed, reloading."
-      worker.destroy()
-    
+      if (worker)
+        # if a worker is already running, kill it and let the exit handler respawn it
+        worker.kill()
+        worker = null
+      else
+        # if a worker died somehow, respawn it right away
+        worker = cluster.fork()
+
     return false
   else
     return true

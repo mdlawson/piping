@@ -9,7 +9,7 @@ cluster.worker.on "message", (options) ->
   if options.hook
     module = require "module"
     _load_orig = module._load
-    
+
     module._load = (name,parent,isMain) ->
       file = module._resolveFilename name,parent
 
@@ -19,11 +19,12 @@ cluster.worker.on "message", (options) ->
 
       _load_orig name,parent,isMain
   ext = path.extname options.main
-  if languages[ext] then require languages[ext] 
+  if languages[ext] then require languages[ext]
   if options.language then require options.language
-  try
-    require main    
-  catch e
-    cluster.worker.send err: e.stack
-    cluster.worker.destroy()
 
+  require main
+
+process.on "uncaughtException", (err) ->
+  cluster.worker.send
+    err: err?.stack || err
+  cluster.worker.kill()

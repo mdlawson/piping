@@ -20,7 +20,11 @@ module.exports = (ops) ->
 
     chokidar = require "chokidar"
 
-    initial = if options.hook then options.main else path.dirname options.main
+    # Workaround for https://github.com/paulmillr/chokidar/issues/237
+    fixChokidar = (file) ->
+      file.slice(0, -1) + "["+file.slice(-1)+"]"
+
+    initial = if options.hook then fixChokidar options.main else path.dirname options.main
 
     watcher = chokidar.watch initial,
       ignored: options.ignore
@@ -46,7 +50,10 @@ module.exports = (ops) ->
           console.log "[piping]".bold.red,"can't execute file:",options.main
           console.log "[piping]".bold.red,"error given was:",message.err
         else if message.file
-          watcher.add message.file
+          if options.usePolling
+            watcher.add message.file
+          else
+            watcher.add (fixChokidar message.file)
 
 
     watcher.on "change", (file) ->

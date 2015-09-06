@@ -60,7 +60,7 @@ module.exports = (ops) ->
       console.log "[piping]".bold.red,"File",path.relative(process.cwd(),file),"has changed, reloading."
       if (worker)
         # if a worker is already running, kill it and let the exit handler respawn it
-        worker.kill()
+        process.kill(worker.process.pid, 'SIGTERM') # worker.kill() doesn't send SIGTERM
         worker = null
       else
         # if a worker died somehow, respawn it right away

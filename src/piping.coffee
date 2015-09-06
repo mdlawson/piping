@@ -7,6 +7,7 @@ options =
     includeModules: false
     main: require.main.filename
     ignore: /(\/\.|~$)/
+    respawnOnExit: true
 
 module.exports = (ops) ->
   if typeof ops is "string" or ops instanceof String
@@ -42,7 +43,7 @@ module.exports = (ops) ->
       for id, worker of cluster.workers
         hasWorkers = true
 
-      if !hasWorkers && respawnPending
+      if !hasWorkers && (respawnPending || options.respawnOnExit)
         cluster.fork()
         respawnPending = false
 

@@ -33,15 +33,19 @@ module.exports = (ops) ->
       interval: options.interval || 100
       binaryInterval: options.binaryInterval || 300
 
-    worker = cluster.fork()
+    cluster.fork()
+    respawnPending = false
+
 
     cluster.on "exit", (dead,code,signal) ->
-      if worker is null
-        # worker was killed due to a file change - respawn
-        worker = cluster.fork()
-      else
-        # worker died by itself - wait for file change
-        worker = null
+      hasWorkers = false
+      for id, worker of cluster.workers
+        hasWorkers = true
+
+      if !hasWorkers && respawnPending
+        cluster.fork()
+        respawnPending = false
+
 
     cluster.on "online", (worker) ->
       worker.send options
@@ -58,13 +62,15 @@ module.exports = (ops) ->
 
     watcher.on "change", (file) ->
       console.log "[piping]".bold.red,"File",path.relative(process.cwd(),file),"has changed, reloading."
-      if (worker)
-        # if a worker is already running, kill it and let the exit handler respawn it
+
+      # if a worker is already running, kill it and let the exit handler respawn it
+      for id, worker of cluster.workers
+        respawnPending = true
         process.kill(worker.process.pid, 'SIGTERM') # worker.kill() doesn't send SIGTERM
-        worker = null
-      else
-        # if a worker died somehow, respawn it right away
-        worker = cluster.fork()
+
+      # if a worker died somehow, respawn it right away
+      unless respawnPending
+        cluster.fork()
 
     return false
   else

@@ -36,6 +36,7 @@ module.exports = (ops) ->
 
     cluster.fork()
     respawnPending = false
+    lastErr = ""
 
 
     cluster.on "exit", (dead,code,signal) ->
@@ -51,9 +52,12 @@ module.exports = (ops) ->
     cluster.on "online", (worker) ->
       worker.send options
       worker.on "message", (message) ->
-        if message.err
+        if message.err && (!options.respawnOnExit || message.err isnt lastErr)
           console.log "[piping]".bold.red,"can't execute file:",options.main
           console.log "[piping]".bold.red,"error given was:",message.err
+          if options.respawnOnExit
+            lastErr = message.err
+            console.log "[piping]".bold.red,"further repeats of this error will be suppressed..."
         else if message.file
           if options.usePolling
             watcher.add message.file

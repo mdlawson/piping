@@ -4,6 +4,11 @@ natives = ['assert','buffer','child_process','cluster','console','constants','cr
 languages =
   ".coffee":"coffee-script"
 
+# Allow registered process signal handlers to execute before exiting.
+# See https://github.com/nodejs/node/issues/4852.
+cluster.worker.on "disconnect", () ->
+  setTimeout((() ->), 0)
+
 cluster.worker.on "message", (options) ->
   main = path.resolve process.cwd(), options.main
   if options.hook

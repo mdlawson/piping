@@ -1,6 +1,6 @@
 {
   "name": "piping",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Keep your code piping hot! Live code reloading without additional binaries",
   "main": "lib/piping.js",
   "dependencies": {

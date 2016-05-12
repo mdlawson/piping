@@ -71,7 +71,7 @@ module.exports = (ops) ->
       # if a worker is already running, kill it and let the exit handler respawn it
       for id, worker of cluster.workers
         respawnPending = true
-        worker.kill()
+        process.kill(worker.process.pid, 'SIGTERM') # worker.kill() doesn't send SIGTERM
 
       # if a worker died somehow, respawn it right away
       unless respawnPending

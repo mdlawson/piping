@@ -28,8 +28,8 @@ The function returned by piping also accepts an options object. The following op
 - __includeModules__ _(boolean)_: Whether to include required files than reside in node_modules folders. Defaults to false. Only has an effect when hook is true. For ignoring node_modules when hook is false, please use ignore.
 - __ignore__ _(regex)_: Files/paths matching this regex will not be watched. Defaults to `/(\/\.|~$)/`
 - __respawnOnExit__ _(boolean)_ : Default false. Whether the application should respawn after exiting. If you experience problems with infinite loops, try setting this to false.
-- __throw__ _(boolean): Use the trick with exceptions to avoid running your code in the first instance. Defaults to true. If set to false, you will need to use an if statement around the piping call to tell if your code should run. Piping returns a truthy value in this case.
-- __quiet__ _(boolean): Suppress piping output. Defaults to false.
+- __throw__ _(boolean)_: Use the trick with exceptions to avoid running your code in the first instance. Defaults to true. If set to false, you will need to use an if statement around the piping call to tell if your code should run. Piping returns a truthy value in this case.
+- __quiet__ _(boolean)_: Suppress piping output. Defaults to false.
 - __usePolling__ _(boolean)_ : From chokidar. Default false. Whether to use fs.watchFile (backed by polling), or fs.watch. It is typically necessary to set this to true to successfully watch files over a network.
 - __interval__ _(integer)_ : From chokidar. Polling specific. Interval of file system polling (default 100).
 - __binaryInterval__ _(integer)_ : From chokidar. Polling specific. Interval of file system polling for binary files.

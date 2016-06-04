@@ -37,6 +37,8 @@ function monitor(options, ready) {
     args: options.args
   });
 
+  const fork = cluster.fork.bind(cluster, options.env);
+
   let main = null;
   let kill = null;
   const status = {
@@ -51,7 +53,7 @@ function monitor(options, ready) {
     if (!status.exiting) {
       status.exitReason = code == 0 ? "exited" : "errored";
       emitter.emit("exited", status);
-      if (options.respawnOnExit) cluster.fork();
+      if (options.respawnOnExit) fork();
     }
   });
 
@@ -92,7 +94,7 @@ function monitor(options, ready) {
     const filename = path.relative(process.cwd(), file);
     options.quiet || console.log("[piping]".bold.red, "File", filename, "has changed, reloading.");
 
-    if (!main.isConnected()) return cluster.fork(); // Old process is dead, just start new one
+    if (!main.isConnected()) return fork(); // Old process is dead, just start new one
 
     // Schedule a kill if graceful reload fails
     kill = setTimeout(function() {
@@ -108,7 +110,7 @@ function monitor(options, ready) {
     main.send({status}); // Tell the process to exit
     main.once("disconnect", function() { // Handle graceful exit by restarting
       clearTimeout(kill);
-      cluster.fork();
+      fork();
     });
   });
 
@@ -117,7 +119,7 @@ function monitor(options, ready) {
   }
 
   ready && ready(emitter);
-  cluster.fork();
+  fork();
 }
 
 export default function piping(options, ready) {

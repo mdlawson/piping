@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "dev": "npm run build -s -- --watch",
-    "test": "ava",
+    "test": "ava test",
     "prepublish": "npm run build",
     "test-all": "autochecker 4 5 6"
   },

@@ -43,6 +43,7 @@ function monitor(options, ready) {
   let kill = null;
   const status = {
     exiting: false,
+    exited: false,
     firstRun: true,
     exitReason: null,
     fileChanged: null,
@@ -50,7 +51,7 @@ function monitor(options, ready) {
 
   // Handle unrequested exits
   cluster.on("exit", function(worker, code, signal) {
-    if (!status.exiting) {
+    if (!status.exited) {
       status.exitReason = code == 0 ? "exited" : "errored";
       emitter.emit("exited", status);
       if (options.respawnOnExit) fork();
@@ -59,6 +60,7 @@ function monitor(options, ready) {
 
   // Application started
   cluster.on("online", function(worker) {
+    status.exiting = false;
     status.exiting = false;
     main = worker;
 
@@ -110,7 +112,11 @@ function monitor(options, ready) {
     main.send({status}); // Tell the process to exit
     main.once("disconnect", function() { // Handle graceful exit by restarting
       clearTimeout(kill);
-      fork();
+      if (status.exiting) {
+        status.exiting = false;
+        status.exited = true;
+        fork();
+      }
     });
   });
 

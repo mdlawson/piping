@@ -1,5 +1,5 @@
 import * as path from "path";
-import * as colors from "colors";
+import "colors"
 import { assign, isString, isNull, isFunction, isBoolean, values } from "lodash";
 import { watch } from "chokidar";
 
@@ -92,7 +92,7 @@ function monitor(options, ready) {
 
   // Handle file changes
   watcher.on("change", function(file) {
-    if (!main) return; // No process is running yet, nothing to do.
+    if (!main || status.exiting) return; // No process is running yet, nothing to do.
     const filename = path.relative(process.cwd(), file);
     options.quiet || console.log("[piping]".bold.red, "File", filename, "has changed, reloading.");
 
@@ -143,7 +143,7 @@ export default function piping(options, ready) {
   // First run, need to start monitor
   if (cluster.isMaster) {
     if (options.throw) {
-      // Avoid exicuting rest of file by use of an exception we then handle with
+      // Avoid executing rest of file by use of an exception we then handle with
       // the node uncaughtException handler. Will not work inside a try/catch block.
       const uncaught = "uncaughtException";
       const listeners = process.listeners(uncaught);

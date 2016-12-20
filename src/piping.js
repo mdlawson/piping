@@ -191,7 +191,7 @@ export default function piping(options, ready) {
       const file = module._resolveFilename(name, parent, isMain);
 
       // Ignore module files unless includeModules is set
-      if (name[0] === "." || (options.includeModules && file.indexOf("node_modules") > 0)) {
+      if (name[0] === "." || options.includeModules || file.indexOf("node_modules") === -1) {
         worker.send({file}); // Tell supervisor about the file
       }
 
